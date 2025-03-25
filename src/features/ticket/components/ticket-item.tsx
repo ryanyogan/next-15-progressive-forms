@@ -12,12 +12,14 @@ import { Ticket } from "@prisma/client";
 import clsx from "clsx";
 import {
   LucideArrowUpRightFromSquare,
+  LucideMoreVertical,
   LucidePencil,
   LucideTrash,
 } from "lucide-react";
 import Link from "next/link";
 import { deleteTicket } from "../actions/delete-ticket";
 import { TICKET_ICONS } from "../constants";
+import { TicketMoreMenu } from "./ticket-more-menu";
 
 type TicketItemProps = {
   ticket: Ticket;
@@ -47,6 +49,17 @@ export async function TicketItem({ ticket, isDetail }: TicketItemProps) {
         <LucideTrash className="size-4" />
       </Button>
     </form>
+  );
+
+  const moreMenu = (
+    <TicketMoreMenu
+      ticket={ticket}
+      trigger={
+        <Button variant="outline" size="icon" className="cursor-pointer">
+          <LucideMoreVertical className="size-4" />
+        </Button>
+      }
+    />
   );
 
   return (
@@ -87,6 +100,7 @@ export async function TicketItem({ ticket, isDetail }: TicketItemProps) {
           <>
             {editButton}
             {deleteButton}
+            {moreMenu}
           </>
         ) : (
           <>
