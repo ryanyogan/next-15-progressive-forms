@@ -10,6 +10,7 @@ type SubmitButtonProps = {
 
 export function SubmitButton({ label }: SubmitButtonProps) {
   const { pending } = useFormStatus();
+
   return (
     <Button disabled={pending} type="submit">
       {pending && <LucideLoaderCircle className="size-4 animate-spin" />}
