@@ -9,12 +9,15 @@ datasource db {
 }
 
 model Ticket {
-  id        String       @id @default(cuid())
-  title     String
-  content   String       @db.VarChar(1024)
-  status    TicketStatus @default(OPEN)
-  updatedAt DateTime     @updatedAt
-  createdAt DateTime     @default(now())
+  id       String       @id @default(cuid())
+  title    String
+  content  String       @db.VarChar(1024)
+  status   TicketStatus @default(OPEN)
+  deadline String
+  bounty   Int
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 }
 
 enum TicketStatus {

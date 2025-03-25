@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ticketEditPath, ticketPath } from "@/paths";
+import { toCurrencyFromCent } from "@/utils/currency";
 import { Ticket } from "@prisma/client";
 import clsx from "clsx";
 import {
@@ -72,10 +73,11 @@ export async function TicketItem({ ticket, isDetail }: TicketItemProps) {
             </span>
           </CardContent>
 
-          <CardFooter>
-            <Link href={ticketPath(ticket.id)} className="text-sm underline">
-              View
-            </Link>
+          <CardFooter className="flex justify-between">
+            <p className="text-sm text-muted-foreground">{ticket.deadline}</p>
+            <p className="text-sm text-muted-foreground">
+              {toCurrencyFromCent(ticket.bounty)}
+            </p>
           </CardFooter>
         </CardHeader>
       </Card>

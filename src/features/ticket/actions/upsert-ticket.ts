@@ -8,13 +8,16 @@ import {
 } from "@/components/forms/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
 import { ticketPath, ticketsPath } from "@/paths";
+import { toCent } from "@/utils/currency";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
 const upsertTicketSchema = z.object({
-  title: z.string({ message: "Title is required" }).min(1).max(200),
-  content: z.string({ message: "Content is required" }).min(1).max(1024),
+  title: z.string().min(1).max(200),
+  content: z.string().min(1).max(1024),
+  deadline: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Is required"),
+  bounty: z.coerce.number().positive(),
 });
 
 export async function upsertTicket(
@@ -26,14 +29,21 @@ export async function upsertTicket(
     const data = upsertTicketSchema.parse({
       title: formData.get("title"),
       content: formData.get("content"),
+      deadline: formData.get("deadline"),
+      bounty: formData.get("bounty"),
     });
+
+    const dbData = {
+      ...data,
+      bounty: toCent(data.bounty),
+    };
 
     await prisma.ticket.upsert({
       where: {
         id: id || "",
       },
-      update: data,
-      create: data,
+      update: dbData,
+      create: dbData,
     });
   } catch (error) {
     return fromErrorToActionState(error, formData);
