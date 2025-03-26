@@ -1,6 +1,20 @@
-import { PrismaClient, Ticket } from "@prisma/client";
+import { hash } from "@node-rs/argon2";
+import { PrismaClient, Ticket, User } from "@prisma/client";
 
 const prisma = new PrismaClient();
+
+const users: Pick<User, "username" | "email">[] = [
+  {
+    username: "admin",
+    email: "admin@admin.com",
+  },
+  {
+    username: "ryan",
+    email: "ryan@jk.com",
+  },
+];
+
+const password = "asdasd";
 
 const tickets: Pick<
   Ticket,
@@ -34,9 +48,21 @@ async function seed() {
   console.log("DB Seed: Started...");
 
   await prisma.ticket.deleteMany();
+  await prisma.user.deleteMany();
+
+  const passwordHash = await hash(password);
+  const dbUsers = await prisma.user.createManyAndReturn({
+    data: users.map((user) => ({
+      ...user,
+      passwordHash,
+    })),
+  });
 
   await prisma.ticket.createMany({
-    data: tickets,
+    data: tickets.map((ticket) => ({
+      ...ticket,
+      userId: dbUsers[0].id,
+    })),
   });
 
   const end = performance.now();
