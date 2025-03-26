@@ -6,8 +6,9 @@ import {
   fromErrorToActionState,
   toActionState,
 } from "@/components/forms/utils/to-action-state";
+import { getAuth } from "@/features/auth/queries/get-auth";
 import { prisma } from "@/lib/prisma";
-import { ticketPath, ticketsPath } from "@/paths";
+import { signInPath, ticketPath, ticketsPath } from "@/paths";
 import { toCent } from "@/utils/currency";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -25,6 +26,11 @@ export async function upsertTicket(
   _actionState: ActionState,
   formData: FormData
 ) {
+  const { user } = await getAuth();
+  if (!user) {
+    redirect(signInPath());
+  }
+
   try {
     const data = upsertTicketSchema.parse({
       title: formData.get("title"),
@@ -35,6 +41,7 @@ export async function upsertTicket(
 
     const dbData = {
       ...data,
+      userId: user.id,
       bounty: toCent(data.bounty),
     };
 
