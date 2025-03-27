@@ -2,7 +2,7 @@
 
 import { signOut } from "@/features/auth/actions/sign-out";
 import { useAuth } from "@/features/auth/hooks/use-auth";
-import { homePath, signInPath, signUpPath, ticketsPath } from "@/paths";
+import { homePath, signInPath, signUpPath } from "@/paths";
 import { LucideKanban, LucideLogOut } from "lucide-react";
 import Link from "next/link";
 import { SubmitButton } from "./forms/submit-button";
@@ -18,13 +18,6 @@ export function Header() {
 
   const navItems = user ? (
     <>
-      <Link
-        href={ticketsPath()}
-        className={buttonVariants({ variant: "outline" })}
-      >
-        Tickets
-      </Link>
-
       <form action={signOut}>
         <SubmitButton label="Sign Out" icon={<LucideLogOut />} />
       </form>

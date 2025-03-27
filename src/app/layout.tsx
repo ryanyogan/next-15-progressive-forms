@@ -1,4 +1,5 @@
 import { Header } from "@/components/header";
+import { Sidebar } from "@/components/sidebar/components/sidebar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
@@ -23,15 +24,18 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <Header />
-          <main
-            className="
+          <div className="flex h-screen overflow-hidden border-collapse">
+            <Sidebar />
+            <main
+              className="
             min-h-screen flex-1 overflow-y-auto 
             overflow-x-hidden py-24 px-8 
             bg-secondary/20 flex flex-col
           "
-          >
-            {children}
-          </main>
+            >
+              {children}
+            </main>
+          </div>
           <Toaster expand />
         </ThemeProvider>
       </body>
