@@ -24,9 +24,12 @@ export function SidebarItem({ isOpen, navItem }: SidebarItemProps) {
         isActive && "bg-muted font-bold hover:bg-muted"
       )}
     >
-      {cloneElement(navItem.icon, {
-        className: "size-5",
-      })}
+      {cloneElement(
+        navItem.icon as React.ReactElement<{ className?: string }>,
+        {
+          className: "size-5",
+        }
+      )}
       <span
         className={cn(
           "absolute left-12 text-base duration-200",
